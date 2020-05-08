@@ -18,7 +18,7 @@ export class CityComponent implements OnInit {
   showWeather(){
     console.log("Hello");
     this.title = "Hello";
-    this.service.getWeather("Singapore");
+    this.service.getWeather("Singapore").subscribe(res => this.text = res.base);
   }
   
   ngOnInit(): void {
@@ -27,6 +27,4 @@ export class CityComponent implements OnInit {
 
 export interface WeatherResult{
   base : string;
-  temp_min : number;
-
 }

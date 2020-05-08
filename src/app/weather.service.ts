@@ -12,12 +12,8 @@ export class WeatherService{
     result:string;
     constructor(private http: HttpClient){}
     
-    getWeather(city:string){
-        this.http.get<any>("http://api.openweathermap.org/data/2.5/weather?q=Suwayr&appid=5dd8ba0ce8c2ad20cf59054c316ac762").subscribe(res => {
-            console.log(res.base);
-            console.log(res.timezone);
-            console.log(res.name);
-        });
+    getWeather(city:string):Observable<WeatherResult>{
+        return this.http.get<any>("http://api.openweathermap.org/data/2.5/weather?q=Suwayr&appid=5dd8ba0ce8c2ad20cf59054c316ac762");
     }
         
 }
