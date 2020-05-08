@@ -7,14 +7,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./city.component.css']
 })
 export class CityComponent implements OnInit {
+  title: string;
+  text: string;
+  service: WeatherService;
+  weatherResult : WeatherResult
 
-  constructor(title: string,text: string,service: WeatherService) {
-    this.title = title;
-    this.text = text;
+  constructor(service: WeatherService) {
+    this.service = service;
   }
-  title = "";
-  text = "";
+  showWeather(){
+    console.log("Hello");
+    this.title = "Hello";
+    this.service.getWeather("Singapore");
+  }
+  
   ngOnInit(): void {
   }
+}
+
+export interface WeatherResult{
+  base : string;
+  temp_min : number;
 
 }
