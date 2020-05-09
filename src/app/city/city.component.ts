@@ -40,14 +40,37 @@ export class CityComponent{
       this.text4 = "Wind Speed: " +(this.weatherResult['wind']['speed'])
       this.pictureUrl = this.weatherResult["weather"][0]["main"] +".png";
       this.clock_tick = Date.now();
+      localStorage.setItem(city,JSON.stringify(this.weatherResult));
     },
     error => {
-      this.title = "Error, No such city";
-      this.text1 = "";
-      this.text2 = "";
-      this.text3 = "";
-      this.text4 = "";
-      this.pictureUrl = "";
+      if (error.status==0)
+      {
+        clearInterval(this.myInterval);
+        this.weatherResult = JSON.parse(localStorage.getItem(city));
+        if (this.weatherResult==null)
+        {
+          this.title = "Sorry";
+          this.text1 = "There are no offline results for this city";
+        }
+        else
+        {
+          this.text1 = "Current Temperature:"+(this.weatherResult["main"]["temp"]- 273.15).toFixed(2) + "\xB0C";
+          this.text2 = "Humidity: "+ String(this.weatherResult["main"]["humidity"]) + "%";
+          this.text3 = "Description: " + this.weatherResult["weather"][0]["description"];
+          this.text4 = "Wind Speed: " +(this.weatherResult['wind']['speed'])
+          this.pictureUrl = this.weatherResult["weather"][0]["main"] +".png";
+          this.title += " - Offline Results"
+        }
+      }
+      else
+      {
+        this.title = "Error, No such city";
+        this.text1 = "";
+        this.text2 = "";
+        this.text3 = "";
+        this.text4 = "";
+        this.pictureUrl = "";
+      }
     });
   };
   openDialog() :void{
@@ -57,7 +80,10 @@ export class CityComponent{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.showWeather(result);
+      if (result)
+      {
+        this.showWeather(result);
+      }
     });
   }
   click(){
