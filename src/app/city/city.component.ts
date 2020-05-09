@@ -31,7 +31,7 @@ export class CityComponent{
     this.clicked = false;
     clearInterval(this.myInterval);
     this.service.getWeather(city).subscribe(res => {
-      this.myInterval = setInterval(()=>{this.showWeather(city);},10000);
+      this.myInterval = setInterval(()=>{this.showWeather(city);},30000);
       this.title = city;
       this.weatherResult = res;
       this.text1 = "Current Temperature:"+(this.weatherResult["main"]["temp"]- 273.15).toFixed(2) + "\xB0C";
