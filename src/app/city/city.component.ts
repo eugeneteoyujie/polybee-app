@@ -1,20 +1,25 @@
+import { FormComponent } from './../form/form.component';
 import { HttpClientModule } from '@angular/common/http';
 import { WeatherService } from './../weather.service';
 import { Component, OnInit } from '@angular/core';
 import { ConvertPropertyBindingResult } from '@angular/compiler/src/compiler_util/expression_converter';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-city',
   templateUrl: './city.component.html',
   styleUrls: ['./city.component.css']
 })
-export class CityComponent implements OnInit {
+export class CityComponent{
   title: string;
   text: string;
   service: WeatherService;
   weatherResult : WeatherResult
+  pictureUrl : string;
+  clock_tick : number;
 
-  constructor(service: WeatherService) {
+  constructor(service: WeatherService,private dialog:MatDialog) {
     this.service = service;
   }
   showWeather(){
@@ -22,15 +27,24 @@ export class CityComponent implements OnInit {
       this.weatherResult = res;
       this.text = String(this.weatherResult["main"]["temp"] - 273.15);
       this.text += "\xB0C"
+      this.pictureUrl = "lightning-bolt.png";
+      this.clock_tick = Date.now();
+    });
+  };
+
+  openDialog() :void{
+    const dialogRef = this.dialog.open(FormComponent, {
+      width: '250px',
+      data: {name : this.title}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.title = result;
     });
   }
-  editCity(){
-    this.title = "Singapore";
-  }
-  
-  ngOnInit(): void {
-  }
+
 }
+  
 
 export interface WeatherResult{
   coord : CoordResult,

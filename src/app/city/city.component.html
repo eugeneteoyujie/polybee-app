@@ -1,8 +1,9 @@
 <div class="card">
-  <div class="card-body">
-    <h5 class="card-title">{{title}}</h5>
-    <p class="card-text">{{text}}</p>
-    <a class="btn btn-outline-secondary" (click) = "editCity()" >Edit</a>
+  <img src="../../assets/{{pictureUrl}}?d={{clock_tick}}" alt="Avatar" style="width:100%">
+  <div class="container">
+    <h4><b>{{title}}</b></h4>
+    <p>{{text}}</p>
+    <button class="btn btn-outline-secondary" (click) = "openDialog()" >Edit</button>
     <button class="btn btn-outline-primary" (click)="showWeather()">Show Weather</button>
   </div>
 </div>
