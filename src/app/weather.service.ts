@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
 import { Injectable, ɵCompiler_compileModuleSync__POST_R3__ } from '@angular/core';
 import { WeatherResult } from './city/city.component';
 
