@@ -13,25 +13,43 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 })
 export class CityComponent{
   title: string;
-  text: string;
+  text1: string;
+  text2: string;
+  text3: string;
+  text4: string;
   service: WeatherService;
   weatherResult : WeatherResult
   pictureUrl : string;
   clock_tick : number;
+  myInterval : any;
+  clicked : boolean = false;
 
   constructor(service: WeatherService,private dialog:MatDialog) {
     this.service = service;
   }
-  showWeather(){
-    this.service.getWeather(this.title).subscribe(res => {
+  showWeather(city:string){
+    this.clicked = false;
+    clearInterval(this.myInterval);
+    this.service.getWeather(city).subscribe(res => {
+      this.myInterval = setInterval(()=>{this.showWeather(city);},10000);
+      this.title = city;
       this.weatherResult = res;
-      this.text = String(this.weatherResult["main"]["temp"] - 273.15);
-      this.text += "\xB0C"
-      this.pictureUrl = "lightning-bolt.png";
+      this.text1 = "Current Temperature:"+(this.weatherResult["main"]["temp"]- 273.15).toFixed(2) + "\xB0C";
+      this.text2 = "Humidity: "+ String(this.weatherResult["main"]["humidity"]) + "%";
+      this.text3 = "Description: " + this.weatherResult["weather"][0]["description"];
+      this.text4 = "Wind Speed: " +(this.weatherResult['wind']['speed'])
+      this.pictureUrl = this.weatherResult["weather"][0]["main"] +".png";
       this.clock_tick = Date.now();
+    },
+    error => {
+      this.title = "Error, No such city";
+      this.text1 = "";
+      this.text2 = "";
+      this.text3 = "";
+      this.text4 = "";
+      this.pictureUrl = "";
     });
   };
-
   openDialog() :void{
     const dialogRef = this.dialog.open(FormComponent, {
       width: '250px',
@@ -39,8 +57,14 @@ export class CityComponent{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.title = result;
+      this.showWeather(result);
     });
+  }
+  click(){
+    if (!this.title)
+    {
+      this.clicked = true;
+    }
   }
 
 }
